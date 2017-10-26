@@ -2,9 +2,10 @@
   "name": "@horsa/node-translator",
   "version": "1.0.0",
   "description": "A node tool to generate json translations files from EXCEL sheet",
-  "main": "index.js",
+  "main": "src/translator.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha",
+    "test-watch": "./node_modules/.bin/mocha -w"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,17 @@
     "excel",
     "json"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Marco Predari <marco.predari@horsa.it> (http://marcopredari.it)",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "6.23.0",
+    "babel-register": "6.26.0",
+    "chai": "4.1.2",
+    "chai-json-schema": "1.5.0",
+    "mocha": "4.0.1"
+  },
+  "dependencies": {
+    "lodash": "4.17.4",
+    "xlsx": "0.11.6"
+  }
 }
