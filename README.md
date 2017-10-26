@@ -17,7 +17,7 @@ We have seen that the ecxel format can change depending from the customer. We ha
 I have included some Js test libraries (chai, mocha) in order to make a small test suite for this module.
 
 ### CI
-For this project a jenkins task will be created.
+Handled by gitlab CI system.
 
 ### Index Repository
 We have to decide if this module will be available all over the world or only inside Horsa company.
