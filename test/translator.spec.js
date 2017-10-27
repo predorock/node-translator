@@ -3,7 +3,7 @@ let chai   = require('chai'),
     assert = require('chai').assert; 
     jsonSchema = require('chai-json-schema')
     path   = require('path')
-    translator = require('../src/translator')
+    translator = require('../src/translator');
 
 chai.use(jsonSchema);
 // Tell chai that we'll be using the "should" style assertions.
@@ -14,50 +14,46 @@ let testTextJsonTranslation = (input, expected) => {
     expect(out).should.be.jsonSchema(expected)
 }
 
-let testTranslatorConfigException = (config, expectedMessage) => {
-    expect(function () {
-            translator.translations(config)
-    }).to.throw(expectedMessage);
+let testException = (fn, params, expectedMessage) => {
+    const msg = [params, ' should thrown an exception with message: \'', expectedMessage, '\''].join('');
+    it(msg, function () {
+        expect(fn).to.throw(expectedMessage);
+    });
 }
 
+let testTranslatorConfigException = (config, expectedMessage) => {
+    testException(() => translator.translations(config), JSON.stringify(config), expectedMessage);
+}
+
+let testNullValuesException = (config, key, message) => {
+    let _config = config;
+    _config[key] = undefined;
+    testTranslatorConfigException(config, message);
+    _config[key] = null;
+    testTranslatorConfigException(config, message);
+    _config[key] = "";
+    testTranslatorConfigException(config, message);
+} 
+
+const sourceExceptionMessage = 'Source must be defined';
+const typeExceptionMessage   = 'Type must be defined';
+const wrongTypeExceptionMessage = 'Type must be one of: [' + translator.sourceTypes.join(', ') +']';
 
 describe('translations', () => {
 
     describe('checking wrong configuration', function () {
-        it('should thrown an exception with message: \'Source must be defined\'', function () {
 
-            const msg = 'Source must be defined';
+        testNullValuesException({}, 'source', sourceExceptionMessage);
 
-            testTranslatorConfigException({}, msg);
-            testTranslatorConfigException({source:null}, msg);
-            testTranslatorConfigException({source:undefined}, msg);
-            testTranslatorConfigException({source:""}, msg);
-        });
+        testNullValuesException({source:'key, it, fr, en'}, 'type', typeExceptionMessage);
 
-        it('should thrown an exception with message: \'Type must be defined\'', function () {
-            
-            const msg = 'Type must be defined';
-            let validSourceConfig = {source: "key,it,en,fr"}
-            
-            validSourceConfig.type = null;
-            testTranslatorConfigException(validSourceConfig, msg);
-            validSourceConfig.type = undefined;
-            testTranslatorConfigException(validSourceConfig, msg);
-            validSourceConfig.type = ""
-            testTranslatorConfigException(validSourceConfig, msg);
-        });
-
-        it('should thrown an exception with message: \'Type must be one of ' + translator.sourceTypes.join(', ') +'\'', function () {
-            
-            const msg = 'Type must be one of: [' + translator.sourceTypes.join(', ') + ']';
-            let validSourceConfig = {source: "key,it,en,fr"}
-            validSourceConfig.type = "pippo";
-            testTranslatorConfigException(validSourceConfig, msg)
-            validSourceConfig.type = 22;
-            testTranslatorConfigException(validSourceConfig, msg)
-            validSourceConfig.type = {type:"string"};
-            testTranslatorConfigException(validSourceConfig, msg)
-        });
+        let validSourceConfig = {source: "key,it,en,fr"}
+        validSourceConfig.type = "pippo";
+        testTranslatorConfigException(validSourceConfig, wrongTypeExceptionMessage);
+        validSourceConfig.type = 22;
+        testTranslatorConfigException(validSourceConfig, wrongTypeExceptionMessage);
+        validSourceConfig.type = {type: "string"};
+        testTranslatorConfigException(validSourceConfig, wrongTypeExceptionMessage);
     });
 
     describe('checking translator output', function () {
