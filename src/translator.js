@@ -54,16 +54,7 @@ let translations = (config) => {
                 .keysIn(row)
                 .filter((k) => k != 'key')
                 .value();
-            // let keys = Object.keys(entry);
-            // _.remove(languages, function (k) {
-            //     return k == 'key';
-            // });
-
-            // languages = _.keysIn(entry);
-            // _.remove(languages, function (k) {
-            //     return k == 'key';
-            // });
-            // var key = entry['key'];
+            
             _.forEach(languages, function (lang) {
                 if (translations[lang] == undefined) {
                     translations[lang] = {};
@@ -74,13 +65,6 @@ let translations = (config) => {
     });
 
     return translations;
-
-    // _.forEach(translations, function (localeDict, locale) {
-    //     var fileName = locale + ".json";
-    //     fs.writeFileSync('app/main/assets/translations/' + fileName, JSON.stringify(localeDict));
-    //     console.log("Translating " + locale + " language done");
-    // });
-
 }
 
 module.exports = {
