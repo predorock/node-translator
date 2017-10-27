@@ -20,9 +20,9 @@ class WrongConfigException {
 }
 
 let checkConfig = (config) => {
-    if (_.isNil(config.source)) 
+    if (_.isNil(config.source) || config.source == "") 
         throw new WrongConfigException('Source must be defined');
-    if (_.isNil(config.type)) 
+    if (_.isNil(config.type) || config.type == "") 
         throw new WrongConfigException('Type must be defined');
     if (inputTypes.indexOf(config.type) === -1) 
         throw new WrongConfigException('Type must be one of: [' + inputTypes.join(', ') + ']');
@@ -68,5 +68,6 @@ let translations = (config) => {
 }
 
 module.exports = {
+    sourceTypes: inputTypes,
     translations: translations
 }
