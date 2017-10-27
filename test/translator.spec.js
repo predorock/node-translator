@@ -1,17 +1,15 @@
 let chai   = require('chai'),
-    expect = require('chai').expect;
-    assert = require('chai').assert; 
-    jsonSchema = require('chai-json-schema')
-    path   = require('path')
+    expect = require('chai').expect,
+    assert = require('chai').assert,
+    path   = require('path'),
     translator = require('../src/translator');
-
-chai.use(jsonSchema);
+    
 // Tell chai that we'll be using the "should" style assertions.
 chai.should();
 
 let testTextJsonTranslation = (input, expected) => {
     const out = translator.translations({source: input, type: 'string'});
-    expect(out).should.be.jsonSchema(expected)
+    expect(out).to.deep.equal(expected);
 }
 
 let testException = (fn, params, expectedMessage) => {
@@ -57,6 +55,13 @@ describe('translations', () => {
     });
 
     describe('checking translator output', function () {
+        
+        it('should return a empty json', function () {
+            const textSheet = "key, it, en, de, fr\ngreet";
+            const expected = {};
+            testTextJsonTranslation(textSheet, expected);
+        });
+        
         it('should return a json with it and en translations of \'ciao\' in key of greet', function () {
             const textSheet = "key, it, en\ngreet, ciao, hello";
             const expected = {
@@ -69,6 +74,48 @@ describe('translations', () => {
             };
             testTextJsonTranslation(textSheet, expected);
         });
+
+        it('should return only defined translations', function () {
+            const textSheet = "key, it, en, de, fr\ngreet, ciao, , hallo";
+            const expected = {
+                it: {
+                    greet: 'ciao'
+                },
+                en: {
+                    greet: ''
+                },
+                de: {
+                    greet: 'hallo'
+                }
+            };
+            testTextJsonTranslation(textSheet, expected);
+        });
+
+
+        it('should return multiple key translations', function () {
+            const textSheet = 
+                    "key, it, en, de\n" +
+                    "greet, ciao, hello, hallo\n" +
+                    "thanks, grazie, thanks, danke";
+            const expected = {
+                it: {
+                    greet: 'ciao',
+                    thanks: 'grazie'
+                },
+                en: {
+                    greet: 'hello',
+                    thanks: 'thanks'
+                },
+                de: {
+                    greet: 'hallo',
+                    thanks: 'danke'
+                }
+            };
+            testTextJsonTranslation(textSheet, expected);
+        });
+        
+
+        
     });
     
 });

@@ -43,16 +43,32 @@ let translations = (config) => {
         var raw_translations = xlxs.utils.sheet_to_row_object_array(sheet);
         var languages = null;
         _.forEach(raw_translations, function (entry) {
-            languages = _.keysIn(entry);
-            _.remove(languages, function (k) {
-                return k == 'key';
-            });
-            var key = entry['key'];
+            //normalization
+            let row = _.chain(entry)
+                .mapKeys((v,k)=> _.trim(k))
+                .mapValues(_.trim)
+                .value();
+
+            let key = row['key'];
+            let languages = _.chain(row)
+                .keysIn(row)
+                .filter((k) => k != 'key')
+                .value();
+            // let keys = Object.keys(entry);
+            // _.remove(languages, function (k) {
+            //     return k == 'key';
+            // });
+
+            // languages = _.keysIn(entry);
+            // _.remove(languages, function (k) {
+            //     return k == 'key';
+            // });
+            // var key = entry['key'];
             _.forEach(languages, function (lang) {
                 if (translations[lang] == undefined) {
                     translations[lang] = {};
                 }
-                translations[lang][key] = entry[lang];
+                translations[lang][key] = row[lang];
             });
         });
     });
