@@ -1,5 +1,5 @@
 {
-  "name": "@horsa/node-translator",
+  "name": "node-translator",
   "version": "1.0.0",
   "description": "A tool to convert your translations from Excel file into separate language Json files",
   "main": "src/translator.js",
