@@ -1,7 +1,7 @@
 {
   "name": "@horsa/node-translator",
   "version": "1.0.0",
-  "description": "A node tool to generate json translations files from EXCEL sheet",
+  "description": "A tool to convert your translations from Excel file into separate language Json files",
   "main": "src/translator.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://predo@gitlab.mate.it/predo/node-translator.git"
+    "url": "https://github.com/predorock/node-translator"
   },
   "keywords": [
     "translations",
