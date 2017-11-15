@@ -13,5 +13,7 @@ The idea is to use a standard format for translations excel file. The format wil
 ### Tests
 I have included some Js test libraries (chai, mocha) in order to make a small test suite for this module.
 
-### CI
+### CI ![alt text][status]
+
+[status]: https://travis-ci.org/predorock/node-translator.svg?branch=master
 
